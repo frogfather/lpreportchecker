@@ -32,6 +32,12 @@ namespace LPReportCheck
 
         public string ScriptEnd { get; set; }
 
+        public bool ISMError{get;set;}
+
+        public bool SuccessCountMismatch{get;set;}
+
+        public bool FailCountMismatch{get;set;}
+
         public int RecCount 
         { 
             get
@@ -104,19 +110,29 @@ namespace LPReportCheck
             }
         }
 
-
-
         public void AddEmailSuccess(string serviceCode)
 
         {            
-            ValueChangedEventArgs args = new ValueChangedEventArgs
+            if (_emailSuccess.IndexOf(serviceCode) ==-1)
             {
-                OldValue = _emailSuccess.Count.ToString(),
-                NewValue = (_emailSuccess.Count+1).ToString(),
-                CalledBy = "Email success codes"
-            };
-            ValueChanged?.Invoke(this, args);
-            _emailSuccess.Add(serviceCode);
+                ValueChangedEventArgs args = new ValueChangedEventArgs
+                {
+                    OldValue = _emailSuccess.Count.ToString(),
+                    NewValue = (_emailSuccess.Count + 1).ToString(),
+                    CalledBy = "Email success codes"
+                };
+                ValueChanged?.Invoke(this, args);
+                _emailSuccess.Add(serviceCode);
+
+                SuccessCountMismatch = CompareSuccess();
+
+                MatchEventArgs eArgs = new MatchEventArgs()
+                {
+                    Value = SuccessCountMismatch,
+                    CalledBy = "SuccessEmail"
+                };
+                MatchChanged?.Invoke(this, eArgs);
+            }
         }
 
         public string GetEmailSuccess(int index)
@@ -129,16 +145,28 @@ namespace LPReportCheck
 
         public void AddEmailFail(string serviceCode, string errorMsg)
         {
-            ValueChangedEventArgs args = new ValueChangedEventArgs
+            if (!_emailFail.ContainsKey(serviceCode))
             {
-                OldValue = _emailFail.Count.ToString(),
-                NewValue = (_emailFail.Count + 1).ToString(),
-                CalledBy = "Email fail codes"
-            };
-            ValueChanged?.Invoke(this, args);
+                ValueChangedEventArgs args = new ValueChangedEventArgs
+                {
+                    OldValue = _emailFail.Count.ToString(),
+                    NewValue = (_emailFail.Count + 1).ToString(),
+                    CalledBy = "Email fail codes"
+                };
+                ValueChanged?.Invoke(this, args);
 
-            _emailFail[serviceCode] = errorMsg;
-            //add delegate
+                _emailFail[serviceCode] = errorMsg;    
+                FailCountMismatch = CompareFail();
+                SetISMErrorFlag(errorMsg);
+
+                MatchEventArgs eArgs = new MatchEventArgs()
+                {
+                    Value = FailCountMismatch,
+                    CalledBy = "FailEmail"
+                };
+                MatchChanged?.Invoke(this, eArgs);
+
+            }
         }
 
         public string GetEmailFail(string serviceCode)
@@ -148,17 +176,27 @@ namespace LPReportCheck
 
         public void AddDashSuccess(string serviceCode)
         {
-            ValueChangedEventArgs args = new ValueChangedEventArgs
+            if (_dashSuccess.IndexOf(serviceCode)==-1)
+            {
+                ValueChangedEventArgs args = new ValueChangedEventArgs
             {
                 OldValue = _dashSuccess.Count.ToString(),
                 NewValue = (_dashSuccess.Count + 1).ToString(),
                 CalledBy = "Dashboard success codes"
-                                                    
             };
-            ValueChanged?.Invoke(this, args);
+                ValueChanged?.Invoke(this, args);
 
-            _dashSuccess.Add(serviceCode);
-            //add delegate
+                _dashSuccess.Add(serviceCode);
+
+                SuccessCountMismatch = CompareSuccess();
+                MatchEventArgs eArgs = new MatchEventArgs()
+                {
+                    Value = SuccessCountMismatch,
+                    CalledBy = "SuccessDash"
+                };
+                MatchChanged?.Invoke(this, eArgs);
+
+            }
         }
 
         public string GetDashSuccess(int index)
@@ -169,16 +207,28 @@ namespace LPReportCheck
 
         public void AddDashFail(string serviceCode)
         {
-            ValueChangedEventArgs args = new ValueChangedEventArgs
+            if (_dashFail.IndexOf(serviceCode)==-1)
+            {
+                ValueChangedEventArgs args = new ValueChangedEventArgs
             {
                 OldValue = _dashFail.Count.ToString(),
                 NewValue = (_dashFail.Count + 1).ToString(),
                 CalledBy = "Dashboard fail codes"
             };
-            ValueChanged?.Invoke(this, args);
+                ValueChanged?.Invoke(this, args);
 
-            _dashFail.Add(serviceCode);
-            //add delegate
+                _dashFail.Add(serviceCode);    
+                FailCountMismatch = CompareFail();
+
+                MatchEventArgs eArgs = new MatchEventArgs()
+                {
+                    Value = FailCountMismatch,
+                    CalledBy = "FailDash"
+                };
+                MatchChanged?.Invoke(this, eArgs);
+
+
+            }                  
         }
 
         public string GetDashFail(int index)
@@ -187,7 +237,36 @@ namespace LPReportCheck
             return _dashFail[index];
         }
 
+
+        private bool CompareSuccess()
+        {
+            if (_emailSuccess.Count != _dashSuccess.Count) { return false; }    
+            foreach(string item in _dashSuccess)
+            {
+                if (_emailSuccess.IndexOf(item)==-1)
+                { return false; }
+            }
+            return true;
+        }
+
+        private bool CompareFail()
+        {
+            if (_emailFail.Count != _dashFail.Count) { return false; }
+            foreach (string item in _dashFail)
+            {
+                if (!_emailFail.ContainsKey(item))
+                { return false; }
+            }
+            return true;
+        }
+
+        private void SetISMErrorFlag(string errorMsg)
+        {
+            ISMError |= errorMsg.Contains("ISM");          
+        }
+
         public event ValueChangedDelegate ValueChanged;
+        public event MatchChangedDelegate MatchChanged;
         int _recCount;
         int _successCount;
         int _failCount;
