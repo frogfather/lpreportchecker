@@ -45,7 +45,8 @@ namespace LPReportCheck
                     ValueChangedEventArgs args = new ValueChangedEventArgs
                     {
                         OldValue = _recCount.ToString(),
-                        NewValue = value.ToString()
+                        NewValue = value.ToString(),
+                        CalledBy = "Record Count"
                     };
                     if (ValueChanged != null)
                     {
@@ -69,7 +70,8 @@ namespace LPReportCheck
                     ValueChangedEventArgs args = new ValueChangedEventArgs
                     {
                         OldValue = _successCount.ToString(),
-                        NewValue = value.ToString()
+                        NewValue = value.ToString(),
+                        CalledBy = "Success Count"
                     };
 
                     ValueChanged?.Invoke(this, args);
@@ -92,7 +94,8 @@ namespace LPReportCheck
                     ValueChangedEventArgs args = new ValueChangedEventArgs
                     {
                         OldValue = _failCount.ToString(),
-                        NewValue = value.ToString()
+                        NewValue = value.ToString(),
+                        CalledBy = "Fail count"
                     };
                     ValueChanged?.Invoke(this, args);
                     _failCount = value;
@@ -109,7 +112,8 @@ namespace LPReportCheck
             ValueChangedEventArgs args = new ValueChangedEventArgs
             {
                 OldValue = _emailSuccess.Count.ToString(),
-                NewValue = (_emailSuccess.Count+1).ToString()
+                NewValue = (_emailSuccess.Count+1).ToString(),
+                CalledBy = "Email success codes"
             };
             ValueChanged?.Invoke(this, args);
             _emailSuccess.Add(serviceCode);
@@ -128,7 +132,8 @@ namespace LPReportCheck
             ValueChangedEventArgs args = new ValueChangedEventArgs
             {
                 OldValue = _emailFail.Count.ToString(),
-                NewValue = (_emailFail.Count + 1).ToString()
+                NewValue = (_emailFail.Count + 1).ToString(),
+                CalledBy = "Email fail codes"
             };
             ValueChanged?.Invoke(this, args);
 
@@ -146,7 +151,9 @@ namespace LPReportCheck
             ValueChangedEventArgs args = new ValueChangedEventArgs
             {
                 OldValue = _dashSuccess.Count.ToString(),
-                NewValue = (_dashSuccess.Count + 1).ToString()
+                NewValue = (_dashSuccess.Count + 1).ToString(),
+                CalledBy = "Dashboard success codes"
+                                                    
             };
             ValueChanged?.Invoke(this, args);
 
@@ -165,7 +172,8 @@ namespace LPReportCheck
             ValueChangedEventArgs args = new ValueChangedEventArgs
             {
                 OldValue = _dashFail.Count.ToString(),
-                NewValue = (_dashFail.Count + 1).ToString()
+                NewValue = (_dashFail.Count + 1).ToString(),
+                CalledBy = "Dashboard fail codes"
             };
             ValueChanged?.Invoke(this, args);
 
