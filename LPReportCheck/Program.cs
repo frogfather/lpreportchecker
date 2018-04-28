@@ -12,8 +12,10 @@ namespace LPReportCheck
             myScript.MatchChanged += OnMatchChanged;
             myScript.RecCount = 2;
             myScript.AddDashFail("1021");
+            myScript.AddDashFail("1121");
             myScript.AddDashSuccess("2212");
-            myScript.AddEmailFail("1021","it didn't work");
+            myScript.AddEmailFail("1121","Something not very bad happened");
+            myScript.AddEmailFail("1021","ISM: Something awful happened");
             myScript.AddEmailSuccess("2212");
             Facility myFacility = new Facility("GrottyHospital", 2059);
             myFacility.AddScript(myScript);

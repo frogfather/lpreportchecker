@@ -262,7 +262,17 @@ namespace LPReportCheck
 
         private void SetISMErrorFlag(string errorMsg)
         {
-            ISMError |= errorMsg.Contains("ISM");          
+            ISMError |= errorMsg.Contains("ISM"); 
+            if (ISMError)
+            {
+                MatchEventArgs eArgs = new MatchEventArgs()
+                {
+                    Value = ISMError,
+                    CalledBy = "ISM Error"
+                };
+                MatchChanged?.Invoke(this, eArgs);
+
+            }
         }
 
         public event ValueChangedDelegate ValueChanged;
