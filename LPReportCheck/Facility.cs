@@ -7,16 +7,16 @@ namespace LPReportCheck
         public Facility(string facName, int facServer)
 
         {
-            name = facName;
-            server = facServer;
-            successCount = 0;
-            failCount = 0;
+            Name = facName;
+            Server = facServer;
+            SuccessCount = 0;
+            FailCount = 0;
             scripts = new List<Script>();
         }
 
-        public void AddScript(Script script)
+        public void AddScript(string scriptName)
         {
-            scripts.Add(script);
+            scripts.Add(new Script(scriptName, FacId));
         }
 
         public Script GetScript(string scriptName)
@@ -25,25 +25,24 @@ namespace LPReportCheck
         }
 
         //to add check dash success total == email success total, check dash fail total == email fail total, check dash success codes == email success codes, check dash fail codes == email fail codes, check error messages for ISM errors
-        public string name { get; set; }
+        public string Name { get; set; }
 
-        public int server { get; set; }
+        public int Server { get; set; }
 
-        public int coid { get; set; }
+        public int Coid { get; set; }
 
-        public string pas { get; set; }
+        public string Pas { get; set; }
 
-        public int facId { get; set; }
+        public int FacId { get; set; }
 
-        public string scriptingStart { get; set; }
+        public string ScriptingStart { get; set; }
 
-        public string scriptingEnd { get; set; }
+        public string ScriptingEnd { get; set; }
 
-        public int successCount { get; set; }
+        public int SuccessCount { get; set; }
 
-        public int failCount { get; set; }
+        public int FailCount { get; set; }
 
-        public event ValueChangedDelegate ValueChanged;
         List<Script> scripts;
 
 

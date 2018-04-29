@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 
 namespace LPReportCheck
 {
@@ -7,33 +8,52 @@ namespace LPReportCheck
         public static void Main(string[] args)
         {
 
-            Script myScript = new Script("TestScript",1024);
-            myScript.ValueChanged += OnValueChanged;
-            myScript.MatchChanged += OnMatchChanged;
-            myScript.RecCount = 2;
-            myScript.AddDashFail("1021");
-            myScript.AddDashFail("1121");
-            myScript.AddDashSuccess("2212");
-            myScript.AddEmailFail("1121","Something not very bad happened");
-            myScript.AddEmailFail("1021","ISM: Something awful happened");
-            myScript.AddEmailSuccess("2212");
-            Facility myFacility = new Facility("GrottyHospital", 2059);
-            myFacility.AddScript(myScript);
-            String testscriptName;
-            testscriptName = "TestCabbage";
-            Script foundScript = myFacility.GetScript(testscriptName);
-            if (foundScript != null)
+            //Script myScript = new Script("TestScript",1024);
+            //myScript.ValueChanged += OnValueChanged;
+            //myScript.MatchChanged += OnMatchChanged;
+            //myScript.RecCount = 2;
+            //myScript.AddDashFail("1021");
+            //myScript.AddDashFail("1121");
+            //myScript.AddDashSuccess("2212");
+            //myScript.AddEmailFail("1121","Something not very bad happened");
+            //myScript.AddEmailFail("1021","ISM: Something awful happened");
+            //myScript.AddEmailSuccess("2212");
+            //Facility myFacility = new Facility("GrottyHospital", 2059);
+            //myFacility.AddScript(myScript);
+            //String testscriptName;
+            //testscriptName = "TestCabbage";
+            //Script foundScript = myFacility.GetScript(testscriptName);
+            //if (foundScript != null)
+            //{
+            //    Console.WriteLine("Looking for "+testscriptName+" found "+foundScript.Name);    
+            //}
+            //else
+            //{
+            //    Console.WriteLine("Looking for " + testscriptName + " found nothing");
+            //}
+
+            //main method creates dashboard
+            Dashboard mainDashboard = new Dashboard();
+            mainDashboard.AddFacility("TestFacility", 2012);
+            mainDashboard.GetFacility("TestFacility").AddScript("TestScript");
+            if (mainDashboard.GetFacility("TestFacility")!=null && mainDashboard.GetFacility("TestFacility").GetScript("TestScript")!=null)
             {
-                Console.WriteLine("Looking for "+testscriptName+" found "+foundScript.Name);    
+                Console.WriteLine(mainDashboard.GetFacility("TestFacility").GetScript("TestScript").Name);    
             }
             else
             {
-                Console.WriteLine("Looking for " + testscriptName + " found nothing");
+                Console.WriteLine("No such object");
             }
+
+
+
             //FileReader fr = new FileReader();
-            //fr.ReadFile("/home/john/Downloads/htmlLayout.txt");
-            //Console.WriteLine("Result count "+fr.GetResultCount());
+            //String fileContents = fr.ReadFile("/home/john/Downloads/htmlLayout.txt");
+            //bool scriptSuccess = fr.Success;
+            //string facilityName = fr.FacilityName;
         }
+
+
 
         static void OnValueChanged(object sender,ValueChangedEventArgs args)
         {
@@ -50,6 +70,7 @@ namespace LPReportCheck
             {
                 Console.WriteLine($"{args.CalledBy} match value is {args.Value} ");
             }
-        }
+        }        
+
     }
 }
