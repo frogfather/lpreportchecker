@@ -34,17 +34,7 @@ namespace LPReportCheck
 
             //main method creates dashboard
             Dashboard mainDashboard = new Dashboard();
-            mainDashboard.AddFacility("TestFacility", 2012);
-            mainDashboard.GetFacility("TestFacility").AddScript("TestScript");
-            if (mainDashboard.GetFacility("TestFacility")!=null && mainDashboard.GetFacility("TestFacility").GetScript("TestScript")!=null)
-            {
-                Console.WriteLine(mainDashboard.GetFacility("TestFacility").GetScript("TestScript").Name);    
-            }
-            else
-            {
-                Console.WriteLine("No such object");
-            }
-
+            Console.WriteLine(mainDashboard.GetFacility("TestFacility").GetScript("TestScript").Name);    
 
 
             //FileReader fr = new FileReader();

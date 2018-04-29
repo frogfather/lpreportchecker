@@ -11,14 +11,19 @@ namespace LPReportCheck
 
         }
 
-        public Facility GetFacility(string facilityName)
+        public void AddFacility(string facilityName)
         {
-            return facilities.Find(x => x.Name == facilityName);
+            facilities.Add(new Facility(facilityName));
         }
 
-        public void AddFacility(string facilityName, int facilityServer)
+        public Facility GetFacility(string facilityName)
         {
-            facilities.Add(new Facility(facilityName, facilityServer));
+            Facility result = facilities.Find(x => x.Name == facilityName);
+            if (result == null)
+            {
+                AddFacility(facilityName);   
+            }
+            return facilities.Find(x => x.Name == facilityName);    
         }
 
 

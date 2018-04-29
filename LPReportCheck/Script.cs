@@ -6,13 +6,11 @@ namespace LPReportCheck
 {
     public class Script
     {
-        public Script(string scriptName, int facilityId)
+        public Script(string scriptName)
 
         {
 
             Name = scriptName;
-
-            FacId = facilityId;
 
             _dashSuccess = new List<string>();
 

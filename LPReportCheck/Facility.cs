@@ -4,11 +4,10 @@ namespace LPReportCheck
 {
     public class Facility
     {
-        public Facility(string facName, int facServer)
+        public Facility(string facName)
 
         {
             Name = facName;
-            Server = facServer;
             SuccessCount = 0;
             FailCount = 0;
             scripts = new List<Script>();
@@ -16,11 +15,12 @@ namespace LPReportCheck
 
         public void AddScript(string scriptName)
         {
-            scripts.Add(new Script(scriptName, FacId));
+            scripts.Add(new Script(scriptName));
         }
 
         public Script GetScript(string scriptName)
         {
+            if (scripts.Find(x => x.Name == scriptName) == null){AddScript(scriptName);}
             return scripts.Find(x => x.Name == scriptName);            
         }
 
