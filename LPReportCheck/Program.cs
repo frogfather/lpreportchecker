@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 
 namespace LPReportCheck
@@ -37,10 +38,10 @@ namespace LPReportCheck
             Console.WriteLine(mainDashboard.GetFacility("TestFacility").GetScript("TestScript").Name);    
 
 
-            //FileReader fr = new FileReader();
-            //String fileContents = fr.ReadFile("/home/john/Downloads/htmlLayout.txt");
-            //bool scriptSuccess = fr.Success;
-            //string facilityName = fr.FacilityName;
+            FileReader fr = new FileReader();
+            fr.ReadFile("/home/john/Downloads/htmlLayout.txt");
+            mainDashboard.ProcessResults(fr.GetResults(),fr.FacilityName,fr.Success);
+
         }
 
 

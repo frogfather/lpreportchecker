@@ -8,6 +8,21 @@ namespace LPReportCheck
 {
     public class FileReader
     {
+        public FileReader()
+        {
+            _contents = new List<string>();
+        }
+
+        private void AddResults(string input)
+        {
+            _contents.Add(input);
+        }
+
+        public List<string> GetResults()
+        {
+            return _contents;
+        }
+
         public string FacilityName
         {
             get
@@ -33,9 +48,9 @@ namespace LPReportCheck
             }
         }
 
-        public String ReadFile(string filename)
-        {
-            string results = "";
+
+        public void ReadFile(string filename)
+        {            
             if (File.Exists(filename)) 
             {
                 using (StreamReader sr = new StreamReader(filename))
@@ -57,14 +72,25 @@ namespace LPReportCheck
                             }
                             if (line.Contains("<div id=facilityBatchContent>"))
                             {
-                                results = (HTMLToCSV(line));
+
+                                string[] sepTables;
+                                string[] sepRows;
+
+                                sepTables = SplitStringByTable(line.Trim());
+                                foreach(string table in sepTables)
+                                {
+                                    sepRows = SplitStringByTableRow(table);
+                                    foreach (string row in sepRows)
+                                    {
+                                        AddResults(HTMLToCSV(row));
+                                    }
+                                }
                             }
                             prevLine = line;
                         }
                     }
                 }
             }
-            return results;
         }
 
 
@@ -75,6 +101,18 @@ namespace LPReportCheck
         }
 
       
+        private string[] SplitStringByTable(string input)
+        {
+            string[] separators = {"</table>"};
+            return input.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+        }
+         
+        private string[] SplitStringByTableRow(string input)
+        {
+            string[] separators = { "</tr>" };
+            return input.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+        }
+
         private string HTMLToCSV(string input)
         {
             string outputString="";
@@ -100,5 +138,6 @@ namespace LPReportCheck
 
         String _facilityName;
         bool _success;
+        List<string> _contents;
     }
 }
