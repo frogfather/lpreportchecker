@@ -47,6 +47,7 @@
     <Compile Include="MatchChangedDelegate.cs" />
     <Compile Include="ScriptClassTest.cs" />
     <Compile Include="Dashboard.cs" />
+    <Compile Include="FileUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
